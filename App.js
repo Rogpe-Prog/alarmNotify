@@ -4,20 +4,35 @@ import ReactNativeAN from 'react-native-alarm-notification';
 
 const App = () => {
   let alarm
-  const fireDate = ReactNativeAN.parseDate(new Date(Date.now() + 10000));
+  let fireDate = ''
+
+  const alarmNotifData = {
+    title: "Bora Bora",
+    message: "Time to Work!!!",
+    channel: "my_channel_id",
+    small_icon: "ic_launcher",
+  
+    // You can add any additional data that is important for the notification
+    // It will be added to the PendingIntent along with the rest of the bundle.
+    // e.g.
+      data: { foo: "bar" },
+  };
 
   const liga = async () => {
-    alarm = await ReactNativeAN.scheduleAlarm({ fire_date: fireDate });
+    fireDate = ReactNativeAN.parseDate(new Date(Date.now() + 10000));
+    alarm = await ReactNativeAN.scheduleAlarm({ ...alarmNotifData, fire_date: fireDate });
     console.log(JSON.stringify(alarm.id))
     console.log('ligaaaa')
   }
 
   const desliga = () => {
-    ReactNativeAN.deleteAlarm(alarm.id);
-    ReactNativeAN.deleteRepeatingAlarm(alarm.id);
+    ReactNativeAN.stopAlarmSound();
     ReactNativeAN.removeAllFiredNotifications();
+    ReactNativeAN.deleteRepeatingAlarm(alarm.id);
+    ReactNativeAN.deleteAlarm(alarm.id);
     console.log(JSON.stringify(alarm.id))
     console.log('desligaaaa')
+
   }
 
   return (
